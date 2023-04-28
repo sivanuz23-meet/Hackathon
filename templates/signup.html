@@ -181,7 +181,7 @@ h1 {
   }
 
 
-input[type="text"], input[type="email"], input[type="password"] {
+input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
   font-size: 0.9em;
   color: #fff;
   font-weight: 100;
@@ -201,7 +201,7 @@ input[type="text"], input[type="email"], input[type="password"] {
   font-family: 'Roboto', sans-serif;
 }
 
-input.email, input.text.w3lpass {
+input.email, input.text.w3lpass, input.text {
   margin: 2em 0;
 }
 
@@ -240,6 +240,13 @@ input[type="submit"]:hover {
                     <input class="text email" type="email" name="email" placeholder="Email" required="">
                     <input class="text" type="password" name="password" placeholder="Password" required="">
                     <input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required="">
+                    {% if musician == "True" %}
+                    <input class="text" type="number" name="experiece" placeholder="Experience" required="">
+                    <input class="text" type="number" name="pay" placeholder="Desired pay" required="">
+                    {% else %}
+                    <input class="text" type="text" name="address" placeholder="Address" required="">
+                    <input class="text" type="number" name="budget" placeholder="Budget" required="">
+                    {% endif %}
                     <div class="wthree-text">
                         <label class="anim">
                         <div class="clear"> </div>

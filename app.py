@@ -5,33 +5,38 @@ import pyrebase
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SECRET_KEY'] = 'super-secret-key'
 
-config = {
-
-  "apiKey": "AIzaSyAA2icBX8XHj5nkIZXvZl0N2xkPur_KVE4",
-
-  "authDomain": "hackathon-5646c.firebaseapp.com",
-
-  "projectId": "hackathon-5646c",
-
-  "storageBucket": "hackathon-5646c.appspot.com",
-
-  "messagingSenderId": "501674961643",
-
-  "appId": "1:501674961643:web:baaea2f16b5bbc5019ecae", "databaseURL": "https://hackathon-5646c-default-rtdb.europe-west1.firebasedatabase.app"
-
+CONFIG = {
+  "apiKey": "AIzaSyBZRsmG7fmpaDN5p0svagIUBsDjTqS1w3w",
+  "authDomain": "hackathon-3971c.firebaseapp.com",
+  "databaseURL": "https://hackathon-3971c-default-rtdb.europe-west1.firebasedatabase.app",
+  "projectId": "hackathon-3971c",
+  "storageBucket": "hackathon-3971c.appspot.com",
+  "messagingSenderId": "498367814246",
+  "appId": "1:498367814246:web:7a0c64806c6d7588406ba7"
 }
 
-firebase = pyrebase.initialize_app(config)
+firebase = pyrebase.initialize_app(CONFIG)
 auth = firebase.auth()
 db = firebase.database()
 
 @app.route('/', methods=['GET', 'POST'])
-def signup():
+def index():
+  return render_template("index.html")
+
+@app.route('/signup/<musician>', methods=['GET', 'POST'])
+def signup(musician):
   error = ""
   if request.method == 'POST':
     email = request.form['email']
     password = request.form['password']
-    user = {"email": email, "password": password, "username" : request.form['Username']}
+    if musician:
+      experience = request.form['experience']
+      pay = request.form['pay']
+      user = {"email": email, "password": password, "username" : request.form['Username'], "experience": experience, "pay": pay}
+    else:
+      address = request.form['address']
+      budget = request.form['budget']
+      user = {"email": email, "password": password, "username" : request.form['Username'], "address": address, "budget": budget}
     try:
       login_session['user'] = auth.create_user_with_email_and_password(email, password)
       db.child('Users').child(login_session['user']['localId']).set(user)
@@ -39,7 +44,7 @@ def signup():
     except:
       error = "Authentication failed"
       print (error)
-  return render_template("signup.html")
+  return render_template("signup.html", musician=musician)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -51,9 +56,9 @@ def signin():
     try:
       login_session['user'] = auth.sign_in_with_email_and_password(email, password)
       return render_template("home.html")
-    except:
+    except Exception as e:
       error = "Authentication failed"
-      print (error)
+      print (e)
   return render_template("signin.html")
 
 
